@@ -1,0 +1,20 @@
+public class Main {
+    public static void main(String[] args) {
+        dimension X
+            choice l
+                System.out.println("You chose left");
+            end
+            choice r
+                System.out.println("You chose right");
+                dimension Y
+                    choice u
+                        System.out.println("You chose up");
+                    end
+                    choice d
+                        System.out.println("You chose down");
+                    end
+                end
+            end
+        end
+    }
+}
