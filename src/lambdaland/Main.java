@@ -29,31 +29,13 @@ public class Main {
         ScannerFactory scannerFactory = ScannerFactory.instance(context);
         Scanner scanner = scannerFactory.newScanner(source, false);
 
-//        Tokens.Token token;
-//        do {
-//            token = scanner.token();
-//            System.out.println(token.kind);
-//            scanner.nextToken();
-//        } while (token.kind != Tokens.TokenKind.EOF);
-
         List<ProgramElement> program = new VariationParser(scanner).parseProgram();
 
         Map<String, String> choices = new HashMap<>();
         choices.put("X", "r");
+        choices.put("Y", "u");
 
         List<Tokens.Token> reducedTokens = VariationReducer.reduce(program, choices);
-        for (Tokens.Token token : reducedTokens) {
-            String name = VariationParser.getName(token);
-            if (name != null) {
-                System.out.println(name);
-            } else {
-                if (token.comments != null) {
-                    for (Tokens.Comment comment : token.comments) {
-                        System.out.println(comment.getText());
-                    }
-                }
-                System.out.println(token.kind);
-            }
-        }
+        PrettyPrinter.print(reducedTokens);
     }
 }

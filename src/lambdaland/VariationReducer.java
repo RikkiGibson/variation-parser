@@ -16,16 +16,16 @@ public class VariationReducer {
             if (programElement instanceof JavaFragment) {
                 tokens.addAll(((JavaFragment)programElement).tokens);
             } else {
-                JavaFragment fragment = getMatchingFragment((Dimension)programElement, choices);
-                if (fragment != null) {
-                    tokens.addAll(fragment.tokens);
+                List<ProgramElement> body = getMatchingProgram((Dimension)programElement, choices);
+                if (body != null) {
+                    tokens.addAll(reduce(body, choices));
                 }
             }
         }
         return tokens;
     }
 
-    public static JavaFragment getMatchingFragment(Dimension dimension, Map<String, String> choices) {
+    public static List<ProgramElement> getMatchingProgram(Dimension dimension, Map<String, String> choices) {
         String choiceIdentifier = choices.get(dimension.id);
         for (Choice choice : dimension.choices) {
             if (choice.id.equals(choiceIdentifier)) {

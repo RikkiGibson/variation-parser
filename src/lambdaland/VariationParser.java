@@ -36,27 +36,45 @@ public class VariationParser {
             program : javatokens program | dimension program | epsilon
             javatokens : javatoken javatokens | epsilon
             javatoken : (any of the tokens defined in java)
-            dimension : DIMENSION identifier choices END
+            dimension : DIMENSION identifier branches END
             choices : choice choices | epsilon
-            choice : CHOICE identifier javatokens END
+            choice : CHOICE identifier program END
          */
 //    }
 
-    List<ProgramElement> parseProgram() {
+    public List<ProgramElement> parseProgram() {
         // for reasons, a thing called bad-symbol that sounds bad always comes up first
         scanner.nextToken();
 
+        // Parse everything that's not bad :-)
+        return parseVJava();
+    }
+
+    boolean isEndOfProgram() {
+        Tokens.Token token = scanner.token();
+        if (token.kind == Tokens.TokenKind.EOF) {
+            return true;
+        }
+        String name = getName(token);
+        if (name != null) {
+            return name.equals("end");
+        }
+        return false;
+    }
+
+    List<ProgramElement> parseVJava() {
         List<ProgramElement> program = new ArrayList<>();
-        Tokens.Token token;
-        do {
-            token = scanner.token();
-            String name = getName(token);
+        while (!isEndOfProgram()) {
+            String name = getName(scanner.token());
+            // if the next token is a dimension
             if (name != null && name.equals("dimension")) {
                 program.add(parseDimension());
-            } else if (token.kind != Tokens.TokenKind.EOF) {
+            }
+            // otherwise, we have more non-variational java tokens to add
+            else {
                 program.add(parseJavaFragment());
             }
-        } while (token.kind != Tokens.TokenKind.EOF);
+        }
 
         return program;
     }
@@ -123,12 +141,12 @@ public class VariationParser {
         String id = getName(scanner.token());
         scanner.nextToken();
 
-        JavaFragment javaFragment = parseJavaFragment();
+        List<ProgramElement> body = parseVJava();
 
         name = getName(scanner.token());
         assert name != null && name.equals("end");
         scanner.nextToken();
 
-        return new Choice(id, javaFragment);
+        return new Choice(id, body);
     }
 }

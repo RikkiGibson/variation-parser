@@ -6,6 +6,14 @@ public class Main {
             end
             choice r
                 System.out.println("You chose right");
+                dimension Y
+                    choice u
+                        System.out.println("You chose up");
+                    end
+                    choice d
+                        System.out.println("You chose down");
+                    end
+                end
             end
         end
     }
