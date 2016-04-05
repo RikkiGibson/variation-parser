@@ -47,6 +47,11 @@ public class Main {
             if (name != null) {
                 System.out.println(name);
             } else {
+                if (token.comments != null) {
+                    for (Tokens.Comment comment : token.comments) {
+                        System.out.println(comment.getText());
+                    }
+                }
                 System.out.println(token.kind);
             }
         }

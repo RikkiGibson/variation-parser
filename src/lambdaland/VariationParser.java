@@ -5,7 +5,6 @@ import com.sun.tools.javac.parser.Tokens;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by rikkigibson on 4/4/16.
@@ -23,10 +22,10 @@ public class VariationParser {
             public class Main {
                 public static void main(String[] args) {
                     dimension X
-                        choice X.l
+                        choice l
                             System.out.println("You chose left");
                         end
-                        choice X.r
+                        choice r
                             System.out.println("You chose right");
                         end
                     end
@@ -46,11 +45,13 @@ public class VariationParser {
     List<ProgramElement> parseProgram() {
         // for reasons, a thing called bad-symbol that sounds bad always comes up first
         scanner.nextToken();
+
         List<ProgramElement> program = new ArrayList<>();
         Tokens.Token token;
         do {
             token = scanner.token();
-            if ("dimension".equals(getName(token))) {
+            String name = getName(token);
+            if (name != null && name.equals("dimension")) {
                 program.add(parseDimension());
             } else if (token.kind != Tokens.TokenKind.EOF) {
                 program.add(parseJavaFragment());
@@ -60,21 +61,22 @@ public class VariationParser {
         return program;
     }
 
-    boolean isVariational(Tokens.Token token) {
-        return "end".equals(getName(token)) || "dimension".equals(getName(token));
-    }
-
     public static String getName(Tokens.Token token) {
         try {
-            if (token.kind == Tokens.TokenKind.STRINGLITERAL) {
-                return token.stringVal();
-            } else {
-                return token.name().toString();
-            }
+            return token.name().toString();
         }
         catch (Exception e) {
             return null;
         }
+    }
+
+    boolean isEndOfJavaFragment() {
+        Tokens.Token token = scanner.token();
+        if (token.kind == Tokens.TokenKind.EOF) {
+            return true;
+        }
+        String name = getName(token);
+        return name != null && (name.equals("end") || name.equals("dimension"));
     }
 
     JavaFragment parseJavaFragment() {
@@ -82,17 +84,18 @@ public class VariationParser {
         Tokens.Token token;
         do {
             token = scanner.token();
-            if (!isVariational(token) && token.kind != Tokens.TokenKind.EOF) {
+            if (!isEndOfJavaFragment()) {
                 tokens.add(token);
                 scanner.nextToken();
             }
-        } while (!isVariational(token) && token.kind != Tokens.TokenKind.EOF);
+        } while (!isEndOfJavaFragment());
 
         return new JavaFragment(tokens);
     }
 
     Dimension parseDimension() {
-        assert "dimension".equals(getName(scanner.token()));
+        String dimensionName = getName(scanner.token());
+        assert dimensionName != null && dimensionName.equals("dimension");
         scanner.nextToken();
 
         String id = getName(scanner.token());
@@ -100,22 +103,21 @@ public class VariationParser {
 
         List<Choice> choices = new ArrayList<>();
         Tokens.Token token;
+        String name;
         do {
+            choices.add(parseChoice());
             token = scanner.token();
-            if ("choice".equals(getName(token))) {
-                choices.add(parseChoice());
-            } else {
-                assert "end".equals(getName(token));
-            }
-        } while (!"end".equals(getName(token)));
-
+            name = getName(token);
+        } while (token.kind != Tokens.TokenKind.EOF && name != null && name.equals("choice"));
+        assert name != null && name.equals("end");
         scanner.nextToken();
 
         return new Dimension(id, choices);
     }
 
     Choice parseChoice() {
-        assert "choice".equals(getName(scanner.token()));
+        String name = getName(scanner.token());
+        assert name != null && name.equals("choice");
         scanner.nextToken();
 
         String id = getName(scanner.token());
@@ -123,7 +125,8 @@ public class VariationParser {
 
         JavaFragment javaFragment = parseJavaFragment();
 
-        assert "end".equals(getName(scanner.token()));
+        name = getName(scanner.token());
+        assert name != null && name.equals("end");
         scanner.nextToken();
 
         return new Choice(id, javaFragment);
