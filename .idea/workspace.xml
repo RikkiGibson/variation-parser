@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7d4c1ed1-c6f3-41a4-b404-1f7352d9850f" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/variation-parser/lambdaland/PrettyPrinter.class" afterPath="$PROJECT_DIR$/out/production/variation-parser/lambdaland/PrettyPrinter.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/lambdaland/PrettyPrinter.java" afterPath="$PROJECT_DIR$/src/lambdaland/PrettyPrinter.java" />
     </list>
     <ignored path="variation-parser.iws" />
@@ -39,10 +41,14 @@
       <file leaf-file-name="PrettyPrinter.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/lambdaland/PrettyPrinter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="146">
-              <caret line="41" column="5" selection-start-line="41" selection-start-column="5" selection-end-line="41" selection-end-column="5" />
+            <state relative-caret-position="544">
+              <caret line="65" column="94" selection-start-line="65" selection-start-column="94" selection-end-line="65" selection-end-column="94" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="method#isEndOfLine#0;class#PrettyPrinter#0" expanded="false" />
+                <element signature="method#needsSpace#0;class#PrettyPrinter#0" expanded="false" />
+                <element signature="method#indentChange#0;class#PrettyPrinter#0" expanded="false" />
+                <element signature="method#getWhitespace#0;class#PrettyPrinter#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -532,7 +538,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="39" />
+      <option name="time" value="40" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
@@ -718,16 +724,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambdaland/VariationReducer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="27" column="46" selection-start-line="27" selection-start-column="46" selection-end-line="27" selection-end-column="46" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/lambdaland/VariationParser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="206">
@@ -756,12 +752,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambdaland/PrettyPrinter.java">
+    <entry file="file://$PROJECT_DIR$/src/lambdaland/VariationReducer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="146">
-          <caret line="41" column="5" selection-start-line="41" selection-start-column="5" selection-end-line="41" selection-end-column="5" />
+        <state relative-caret-position="289">
+          <caret line="27" column="46" selection-start-line="27" selection-start-column="46" selection-end-line="27" selection-end-column="46" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambdaland/PrettyPrinter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="65" column="94" selection-start-line="65" selection-start-column="94" selection-end-line="65" selection-end-column="94" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#isEndOfLine#0;class#PrettyPrinter#0" expanded="false" />
+            <element signature="method#needsSpace#0;class#PrettyPrinter#0" expanded="false" />
+            <element signature="method#indentChange#0;class#PrettyPrinter#0" expanded="false" />
+            <element signature="method#getWhitespace#0;class#PrettyPrinter#0" expanded="false" />
           </folding>
         </state>
       </provider>

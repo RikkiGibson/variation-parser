@@ -42,16 +42,19 @@ public class PrettyPrinter {
     }
 
     private static boolean needsSpace(Tokens.Token token, Tokens.Token next) {
-        if(next != null &&
-          (next.kind == Tokens.TokenKind.RPAREN || next.kind == Tokens.TokenKind.SEMI)) {
-            return false;
+        if(next != null) {
+              if (next.kind == Tokens.TokenKind.RPAREN || next.kind == Tokens.TokenKind.SEMI){
+                  return false;
+              }
+              if (next.kind == Tokens.TokenKind.LBRACE) {
+                  return true;
+              }
         }
-        else {
-             return token.kind != Tokens.TokenKind.LPAREN &&
-                    token.kind != Tokens.TokenKind.LBRACKET &&
-                    token.kind != Tokens.TokenKind.IDENTIFIER &&
-                    token.kind != Tokens.TokenKind.DOT;
-        }
+
+        return token.kind != Tokens.TokenKind.LPAREN &&
+                token.kind != Tokens.TokenKind.LBRACKET &&
+                token.kind != Tokens.TokenKind.IDENTIFIER &&
+                token.kind != Tokens.TokenKind.DOT;
     }
 
     private static int indentChange(Tokens.Token token) {
