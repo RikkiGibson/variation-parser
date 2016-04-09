@@ -28,4 +28,15 @@ public class VToken {
     public String name() {
         return id;
     }
+
+    public String toString() {
+        String ret = "";
+        if(this.type == VTokenType.DIMENSION) {
+            ret += "dimension ";
+        } else {
+            ret += "alternative ";
+        }
+        ret += this.id;
+        return ret;
+    }
 }

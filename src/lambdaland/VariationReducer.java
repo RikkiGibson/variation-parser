@@ -1,10 +1,7 @@
 package lambdaland;
 
 import com.sun.tools.javac.parser.Tokens;
-import lambdaland.Variation.Alternative;
-import lambdaland.Variation.Dimension;
-import lambdaland.Variation.JavaFragment;
-import lambdaland.Variation.ProgramElement;
+import lambdaland.Variation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +11,13 @@ import java.util.Map;
  * Created by rikkigibson on 4/4/16.
  */
 public class VariationReducer {
-    public static List<Tokens.Token> reduceProgram(List<ProgramElement> program, Map<String, String> choices) {
-        List<Tokens.Token> tokens = new ArrayList<>();
+    public static List<VJavaToken> reduceProgram(List<ProgramElement> program, Map<String, String> selections) {
+        List<VJavaToken> tokens = new ArrayList<>();
         for (ProgramElement programElement : program) {
             if (programElement instanceof JavaFragment) {
                 tokens.addAll(((JavaFragment)programElement).tokens);
             } else {
-                List<Tokens.Token> body = reduceDimension((Dimension)programElement, choices);
+                List<VJavaToken> body = reduceDimension((Dimension)programElement, selections);
                 if (body != null) {
                     tokens.addAll(body);
                 }
@@ -29,21 +26,21 @@ public class VariationReducer {
         return tokens;
     }
 
-    public static List<Tokens.Token> reduceDimension(Dimension dimension, Map<String, String> choices) {
+    public static List<VJavaToken> reduceDimension(Dimension dimension, Map<String, String> selections) {
         //if the user has made a selection for this dimension, then reduceProgram it
-        if(choices.containsKey(dimension.id)) {
-            String selectedAlternative = choices.get(dimension.id);
+        if(selections.containsKey(dimension.id)) {
+            String selectedAlternative = selections.get(dimension.id);
             //find the alternative that the user selected
             for (Alternative alternative : dimension.alternatives) {
                 if (alternative.id.equals(selectedAlternative)) {
                     //return that alternative's contents, recursively
-                    return reduceProgram(alternative.body, choices);
+                    return reduceProgram(alternative.body, selections);
                 }
             }
         }
         //otherwise, return the tokens corresponding to the full dimension-alternative syntax
         else {
-            List<Tokens.Token> tokens = new ArrayList<>();
+            List<VJavaToken> tokens = new ArrayList<>();
             //tokens.add()
 
         }

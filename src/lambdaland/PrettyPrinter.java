@@ -1,6 +1,7 @@
 package lambdaland;
 
 import com.sun.tools.javac.parser.Tokens;
+import lambdaland.Variation.VJavaToken;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
 public class PrettyPrinter {
     final static String indentChar = "\t";
 
-    static void print(List<Tokens.Token> program) {
+    static void print(List<VJavaToken> program) {
         int indentLevel = 0;
         for (int i = 0; i < program.size() - 1; i++) {
             indentLevel += printToken(program.get(i), program.get(i+1), indentLevel);
@@ -18,18 +19,9 @@ public class PrettyPrinter {
         printToken(program.get(program.size()-1), null, indentLevel);
     }
 
-    private static int printToken(Tokens.Token cur, Tokens.Token next, int indentLevel) {
-        String name = VariationParser.getName(cur);
-        if (name != null) {
-            System.out.print(name);
-        } else {
-            if (cur.comments != null) {
-                for (Tokens.Comment comment : cur.comments) {
-                    System.out.print(comment.getText());
-                }
-            }
-            System.out.print(cur.kind.toString().replace("'", ""));
-        }
+    private static int printToken(VJavaToken cur, VJavaToken next, int indentLevel) {
+        System.out.print(cur.toString());
+
         int deltaIndent = indentChange(cur);
 
         System.out.print(getWhitespace(cur, next, indentLevel + deltaIndent));
@@ -37,39 +29,39 @@ public class PrettyPrinter {
         return deltaIndent;
     }
 
-    private static boolean isEndOfLine(Tokens.Token token) {
-        return token.kind == Tokens.TokenKind.SEMI || token.kind == Tokens.TokenKind.LBRACE || token.kind == Tokens.TokenKind.RBRACE;
+    private static boolean isEndOfLine(VJavaToken token) {
+        return token.isKind(Tokens.TokenKind.SEMI) || token.isKind(Tokens.TokenKind.LBRACE) || token.isKind(Tokens.TokenKind.RBRACE);
     }
 
-    private static boolean needsSpace(Tokens.Token token, Tokens.Token next) {
+    private static boolean needsSpace(VJavaToken token, VJavaToken next) {
         if(next != null) {
-              if (next.kind == Tokens.TokenKind.RPAREN || next.kind == Tokens.TokenKind.SEMI){
+              if (next.isKind(Tokens.TokenKind.RPAREN) || next.isKind(Tokens.TokenKind.SEMI)){
                   return false;
               }
-              if (next.kind == Tokens.TokenKind.LBRACE) {
+              if (next.isKind(Tokens.TokenKind.LBRACE)) {
                   return true;
               }
         }
 
-        return token.kind != Tokens.TokenKind.LPAREN &&
-                token.kind != Tokens.TokenKind.LBRACKET &&
-                token.kind != Tokens.TokenKind.IDENTIFIER &&
-                token.kind != Tokens.TokenKind.DOT;
+        return token.isKind(Tokens.TokenKind.LPAREN) &&
+                token.isKind(Tokens.TokenKind.LBRACKET) &&
+                token.isKind(Tokens.TokenKind.IDENTIFIER) &&
+                token.isKind(Tokens.TokenKind.DOT);
     }
 
-    private static int indentChange(Tokens.Token token) {
-        if(token.kind == Tokens.TokenKind.LBRACE) return 1;
-        if(token.kind == Tokens.TokenKind.RBRACE) return -1;
+    private static int indentChange(VJavaToken token) {
+        if(token.isKind(Tokens.TokenKind.LBRACE)) return 1;
+        if(token.isKind(Tokens.TokenKind.RBRACE)) return -1;
         return 0;
     }
 
-    private static String getWhitespace(Tokens.Token cur, Tokens.Token next, int indentLevel) {
+    private static String getWhitespace(VJavaToken cur, VJavaToken next, int indentLevel) {
         String result = "";
         if (needsSpace(cur, next)) {
             result = " ";
         }
         if (isEndOfLine(cur)) {
-            if (next != null && next.kind == Tokens.TokenKind.RBRACE) {
+            if (next != null && next.isKind(Tokens.TokenKind.RBRACE)) {
                 indentLevel -= 1;
             }
 
