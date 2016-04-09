@@ -1,5 +1,7 @@
 package lambdaland.Variation;
 
+import com.sun.tools.javac.parser.Tokens;
+
 /**
  * Created by Miles on 4/9/2016.
  */
@@ -12,6 +14,14 @@ public class VToken {
         this.id = id;
         this.type = type;
     }
+
+    public VToken(Tokens.Token token) {
+        if(token.name() != null && token.name().equals("dimension")) {
+            this.type = VTokenType.DIMENSION;
+            this.id = token.toString();
+        }
+    }
+
     public String id;
     private VTokenType type;
 

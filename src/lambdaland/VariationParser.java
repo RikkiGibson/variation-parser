@@ -2,10 +2,7 @@ package lambdaland;
 
 import com.sun.tools.javac.parser.Scanner;
 import com.sun.tools.javac.parser.Tokens;
-import lambdaland.Variation.Alternative;
-import lambdaland.Variation.Dimension;
-import lambdaland.Variation.JavaFragment;
-import lambdaland.Variation.ProgramElement;
+import lambdaland.Variation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,23 +52,24 @@ public class VariationParser {
     }
 
     boolean isEndOfProgram() {
-        Tokens.Token token = scanner.token();
-        if (token.kind == Tokens.TokenKind.EOF) {
-            return true;
+        VJavaToken token = new VJavaToken(scanner.token());
+        //the end of a variational segment is the 'end' keyword
+        if (token.isVariational()) {
+            return token.name().equals("end");
         }
-        String name = getName(token);
-        if (name != null) {
-            return name.equals("end");
+        //otherwise, the end of a program must be the EOF token
+        else {
+            return token.isKind(Tokens.TokenKind.EOF);
         }
-        return false;
     }
 
     List<ProgramElement> parseVJava() {
         List<ProgramElement> program = new ArrayList<>();
         while (!isEndOfProgram()) {
-            String name = getName(scanner.token());
-            // if the next token is a dimension
-            if (name != null && name.equals("dimension")) {
+            VJavaToken token = new VJavaToken(scanner.token());
+
+            // if the token is a dimension
+            if (token.isVariational()) {
                 program.add(parseDimension());
             }
             // otherwise, we have more non-variational java tokens to add
@@ -83,29 +81,24 @@ public class VariationParser {
         return program;
     }
 
-    public static String getName(Tokens.Token token) {
-        try {
-            return token.name().toString();
-        }
-        catch (Exception e) {
-            return null;
-        }
-    }
-
     boolean isEndOfJavaFragment() {
-        Tokens.Token token = scanner.token();
-        if (token.kind == Tokens.TokenKind.EOF) {
-            return true;
+        VJavaToken token = new VJavaToken(scanner.token());
+        //if we have arrived at the end of a variation segment, or the beginning of a new one
+        //then the java segment is terminated
+        if (token.isVariational()) {
+            return token.name().equals("end") || token.name().equals("dimension");
         }
-        String name = getName(token);
-        return name != null && (name.equals("end") || name.equals("dimension"));
+        //otherwise, the end of a java segment must be the EOF token
+        else {
+            return token.isKind(Tokens.TokenKind.EOF);
+        }
     }
 
     JavaFragment parseJavaFragment() {
-        List<Tokens.Token> tokens = new ArrayList<>();
-        Tokens.Token token;
+        List<VJavaToken> tokens = new ArrayList<>();
+        VJavaToken token;
         do {
-            token = scanner.token();
+            token = new VJavaToken(scanner.token());
             if (!isEndOfJavaFragment()) {
                 tokens.add(token);
                 scanner.nextToken();
@@ -116,39 +109,39 @@ public class VariationParser {
     }
 
     Dimension parseDimension() {
-        String dimensionName = getName(scanner.token());
-        assert dimensionName != null && dimensionName.equals("dimension");
+        VJavaToken dimToken = new VJavaToken(scanner.token());
+        assert dimToken.name().equals("dimension");
         scanner.nextToken();
 
-        String id = getName(scanner.token());
+        VJavaToken dimIdToken = new VJavaToken(scanner.token());
+        String id = dimIdToken.name();
         scanner.nextToken();
 
         List<Alternative> alternatives = new ArrayList<>();
-        Tokens.Token token;
-        String name;
+        VJavaToken token;
         do {
             alternatives.add(parseChoice());
-            token = scanner.token();
-            name = getName(token);
-        } while (token.kind != Tokens.TokenKind.EOF && name != null && name.equals("alternative"));
-        assert name != null && name.equals("end");
+            token = new VJavaToken(scanner.token());
+        } while (!token.isKind(Tokens.TokenKind.EOF) && token.name().equals("alternative"));
+        assert token.name().equals("end");
         scanner.nextToken();
 
         return new Dimension(id, alternatives);
     }
 
     Alternative parseChoice() {
-        String name = getName(scanner.token());
-        assert name != null && name.equals("alternative");
+        VJavaToken dimToken = new VJavaToken(scanner.token());
+        assert dimToken.name().equals("alternative");
         scanner.nextToken();
 
-        String id = getName(scanner.token());
+        VJavaToken altIdToken = new VJavaToken(scanner.token());
+        String id = altIdToken.name();
         scanner.nextToken();
 
         List<ProgramElement> body = parseVJava();
 
-        name = getName(scanner.token());
-        assert name != null && name.equals("end");
+        VJavaToken endToken = new VJavaToken(scanner.token());
+        assert endToken.name().equals("end");
         scanner.nextToken();
 
         return new Alternative(id, body);
