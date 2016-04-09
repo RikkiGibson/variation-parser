@@ -35,7 +35,7 @@ public class Main {
         choices.put("X", "r");
         choices.put("Y", "u");
 
-        List<Tokens.Token> reducedTokens = VariationReducer.reduce(program, choices);
+        List<Tokens.Token> reducedTokens = VariationReducer.reduceProgram(program, choices);
         PrettyPrinter.print(reducedTokens);
     }
 }
