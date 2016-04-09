@@ -7,9 +7,9 @@ import java.util.List;
  */
 public class Dimension extends ProgramElement {
     public final String id;
-    public final List<Choice> choices;
-    public Dimension(String id, List<Choice> choices) {
+    public final List<Alternative> alternatives;
+    public Dimension(String id, List<Alternative> alternatives) {
         this.id = id;
-        this.choices = choices;
+        this.alternatives = alternatives;
     }
 }

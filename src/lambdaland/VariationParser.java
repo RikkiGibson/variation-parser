@@ -37,7 +37,7 @@ public class VariationParser {
             javatokens : javatoken javatokens | epsilon
             javatoken : (any of the tokens defined in java)
             dimension : DIMENSION identifier branches END
-            choices : choice choices | epsilon
+            alternatives : choice alternatives | epsilon
             choice : CHOICE identifier program END
          */
 //    }
@@ -119,21 +119,21 @@ public class VariationParser {
         String id = getName(scanner.token());
         scanner.nextToken();
 
-        List<Choice> choices = new ArrayList<>();
+        List<Alternative> alternatives = new ArrayList<>();
         Tokens.Token token;
         String name;
         do {
-            choices.add(parseChoice());
+            alternatives.add(parseChoice());
             token = scanner.token();
             name = getName(token);
         } while (token.kind != Tokens.TokenKind.EOF && name != null && name.equals("choice"));
         assert name != null && name.equals("end");
         scanner.nextToken();
 
-        return new Dimension(id, choices);
+        return new Dimension(id, alternatives);
     }
 
-    Choice parseChoice() {
+    Alternative parseChoice() {
         String name = getName(scanner.token());
         assert name != null && name.equals("choice");
         scanner.nextToken();
@@ -147,6 +147,6 @@ public class VariationParser {
         assert name != null && name.equals("end");
         scanner.nextToken();
 
-        return new Choice(id, body);
+        return new Alternative(id, body);
     }
 }

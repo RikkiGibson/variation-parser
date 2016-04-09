@@ -1,16 +1,16 @@
 public class Main {
     public static void main(String[] args) {
         dimension X
-            choice l
+            alternative l
                 System.out.println("You chose left");
             end
-            choice r
+            alternative r
                 System.out.println("You chose right");
                 dimension Y
-                    choice u
+                    alternative u
                         System.out.println("You chose up");
                     end
-                    choice d
+                    alternative d
                         System.out.println("You chose down");
                     end
                 end

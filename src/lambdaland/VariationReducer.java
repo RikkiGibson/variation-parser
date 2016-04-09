@@ -27,9 +27,9 @@ public class VariationReducer {
 
     public static List<ProgramElement> getMatchingProgram(Dimension dimension, Map<String, String> choices) {
         String choiceIdentifier = choices.get(dimension.id);
-        for (Choice choice : dimension.choices) {
-            if (choice.id.equals(choiceIdentifier)) {
-                return choice.body;
+        for (Alternative alternative : dimension.alternatives) {
+            if (alternative.id.equals(choiceIdentifier)) {
+                return alternative.body;
             }
         }
         return null;
