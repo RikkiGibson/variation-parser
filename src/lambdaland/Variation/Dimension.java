@@ -1,4 +1,4 @@
-package lambdaland;
+package lambdaland.Variation;
 
 import java.util.List;
 

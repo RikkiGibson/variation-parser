@@ -1,4 +1,4 @@
-package lambdaland;
+package lambdaland.Variation;
 
 import com.sun.tools.javac.parser.Tokens;
 

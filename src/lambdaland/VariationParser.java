@@ -2,6 +2,10 @@ package lambdaland;
 
 import com.sun.tools.javac.parser.Scanner;
 import com.sun.tools.javac.parser.Tokens;
+import lambdaland.Variation.Alternative;
+import lambdaland.Variation.Dimension;
+import lambdaland.Variation.JavaFragment;
+import lambdaland.Variation.ProgramElement;
 
 import java.util.ArrayList;
 import java.util.List;

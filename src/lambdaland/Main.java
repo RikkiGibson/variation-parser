@@ -2,6 +2,7 @@ package lambdaland;
 
 import com.sun.tools.javac.parser.*;
 import com.sun.tools.javac.util.Context;
+import lambdaland.Variation.ProgramElement;
 
 import java.io.IOException;
 import java.nio.file.Files;
