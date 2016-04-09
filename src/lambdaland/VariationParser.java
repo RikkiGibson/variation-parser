@@ -22,10 +22,10 @@ public class VariationParser {
             public class Main {
                 public static void main(String[] args) {
                     dimension X
-                        choice l
+                        alternative l
                             System.out.println("You chose left");
                         end
-                        choice r
+                        alternative r
                             System.out.println("You chose right");
                         end
                     end
@@ -37,8 +37,8 @@ public class VariationParser {
             javatokens : javatoken javatokens | epsilon
             javatoken : (any of the tokens defined in java)
             dimension : DIMENSION identifier branches END
-            alternatives : choice alternatives | epsilon
-            choice : CHOICE identifier program END
+            alternatives : alternative alternatives | epsilon
+            alternative : CHOICE identifier program END
          */
 //    }
 
@@ -126,7 +126,7 @@ public class VariationParser {
             alternatives.add(parseChoice());
             token = scanner.token();
             name = getName(token);
-        } while (token.kind != Tokens.TokenKind.EOF && name != null && name.equals("choice"));
+        } while (token.kind != Tokens.TokenKind.EOF && name != null && name.equals("alternative"));
         assert name != null && name.equals("end");
         scanner.nextToken();
 
@@ -135,7 +135,7 @@ public class VariationParser {
 
     Alternative parseChoice() {
         String name = getName(scanner.token());
-        assert name != null && name.equals("choice");
+        assert name != null && name.equals("alternative");
         scanner.nextToken();
 
         String id = getName(scanner.token());
