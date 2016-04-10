@@ -7,36 +7,33 @@ import com.sun.tools.javac.parser.Tokens;
  */
 public class VToken {
     public enum VTokenType {
-        DIMENSION, ALTERNATIVE
+        DIMENSION, ALTERNATIVE, END
     }
 
     public VToken(VTokenType type, String id) {
-        this.id = id;
         this.type = type;
     }
 
     public VToken(Tokens.Token token) {
-        if(token.name() != null && token.name().equals("dimension")) {
+        if(token.name() != null && token.name().toString().equals("dimension")) {
             this.type = VTokenType.DIMENSION;
-            this.id = token.toString();
+        } else if(token.name() != null && token.name().toString().equals("alternative")) {
+            this.type = VTokenType.ALTERNATIVE;
+        } else if(token.name() != null && token.name().toString().equals("end")) {
+            this.type = VTokenType.END;
         }
     }
 
-    public String id;
     private VTokenType type;
 
     public String name() {
-        return id;
+        if(this.type == VTokenType.ALTERNATIVE) return "alternative";
+        if(this.type == VTokenType.DIMENSION) return "dimension";
+        if(this.type == VTokenType.END) return "end";
+        return null;
     }
 
     public String toString() {
-        String ret = "";
-        if(this.type == VTokenType.DIMENSION) {
-            ret += "dimension ";
-        } else {
-            ret += "alternative ";
-        }
-        ret += this.id;
-        return ret;
+        return this.name();
     }
 }

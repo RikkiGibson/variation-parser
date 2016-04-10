@@ -37,8 +37,14 @@ public class PrettyPrinter {
     }
 
     private static boolean needsSpace(VJavaToken token, VJavaToken next) {
+        //if the next token is a special syntax token, spaces have special rules
         if(next != null) {
-              if (next.isKind(Tokens.TokenKind.RPAREN) || next.isKind(Tokens.TokenKind.SEMI)){
+              if (next.isKind(Tokens.TokenKind.RPAREN)
+                  || next.isKind(Tokens.TokenKind.LPAREN)
+                  || next.isKind(Tokens.TokenKind.LBRACKET)
+                  || next.isKind(Tokens.TokenKind.SEMI)
+                  || next.isKind(Tokens.TokenKind.DOT)) {
+
                   return false;
               }
               if (next.isKind(Tokens.TokenKind.LBRACE)) {
@@ -46,10 +52,17 @@ public class PrettyPrinter {
               }
         }
 
-        return !token.isKind(Tokens.TokenKind.LPAREN) &&
-               !token.isKind(Tokens.TokenKind.LBRACKET) &&
-               !token.isKind(Tokens.TokenKind.IDENTIFIER) &&
-               !token.isKind(Tokens.TokenKind.DOT);
+        //never insert a space after an accessor or left paren/bracket
+        if (token.isKind(Tokens.TokenKind.DOT)
+            || token.isKind(Tokens.TokenKind.LPAREN)
+            || token.isKind(Tokens.TokenKind.LBRACKET)) return false;
+
+
+        //if this token is an identifier, we want a space
+        if (token.isKind(Tokens.TokenKind.IDENTIFIER)) return true;
+
+        //default for edge cases I didn't think of
+        return true;
     }
 
     private static int indentChange(VJavaToken token) {

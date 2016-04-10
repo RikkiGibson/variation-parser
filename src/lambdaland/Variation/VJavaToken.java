@@ -15,7 +15,6 @@ public class VJavaToken {
     }
 
     private TokenType type;
-
     private Tokens.Token baseToken;
     private VToken vtoken;
 
@@ -33,7 +32,10 @@ public class VJavaToken {
     private boolean isVariational(Tokens.Token token) {
         try {
             return token.name() != null
-                && (token.name().toString().equals("dimension") || token.name().toString().equals("alternative"));
+                && (token.name().toString().equals("dimension")
+                    || token.name().toString().equals("alternative")
+                    || token.name().toString().equals("end"));
+
         }
         catch (Exception e) {
             return false;
@@ -44,9 +46,10 @@ public class VJavaToken {
         if (isVariational(token)) {
             this.type = TokenType.VARIATIONAL;
             this.vtoken = new VToken(token);
+        } else {
+            this.baseToken = token;
+            this.type = TokenType.BASEJAVA;
         }
-        this.baseToken = token;
-        this.type = TokenType.BASEJAVA;
     }
 
     public boolean isKind(Tokens.TokenKind kind) {
