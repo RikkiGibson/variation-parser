@@ -41,7 +41,9 @@ public class VariationReducer {
         //otherwise, return the tokens corresponding to the full dimension-alternative syntax
         else {
             List<VJavaToken> tokens = new ArrayList<>();
-            //tokens.add()
+            tokens.add(new VJavaToken("dimension"));
+            tokens.add(new VJavaToken("end"));
+            return tokens;
 
         }
         return null;

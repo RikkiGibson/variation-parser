@@ -34,8 +34,8 @@ public class Main {
         List<ProgramElement> program = new VariationParser(scanner).parseProgram();
 
         Map<String, String> choices = new HashMap<>();
-        choices.put("X", "r");
-        choices.put("Y", "u");
+//        choices.put("X", "r");
+//        choices.put("Y", "u");
 
         List<VJavaToken> reducedTokens = VariationReducer.reduceProgram(program, choices);
         PrettyPrinter.print(reducedTokens);

@@ -52,6 +52,11 @@ public class VJavaToken {
         }
     }
 
+    public VJavaToken(String vjavaType) {
+        this.type = TokenType.VARIATIONAL;
+        this.vtoken = new VToken(vjavaType);
+    }
+
     public boolean isKind(Tokens.TokenKind kind) {
         //if this isn't a base java token, then it certainly doesn't match one of the base java kinds
         if(this.type == TokenType.VARIATIONAL) return false;
