@@ -30,7 +30,10 @@ public class PrettyPrinter {
     }
 
     private static boolean isEndOfLine(VJavaToken token) {
-        return token.isKind(Tokens.TokenKind.SEMI) || token.isKind(Tokens.TokenKind.LBRACE) || token.isKind(Tokens.TokenKind.RBRACE);
+        return token.isKind(Tokens.TokenKind.SEMI)
+                || token.isKind(Tokens.TokenKind.LBRACE)
+                || token.isKind(Tokens.TokenKind.RBRACE)
+                || token.isVariational();
     }
 
     private static boolean needsSpace(VJavaToken token, VJavaToken next) {
@@ -43,10 +46,10 @@ public class PrettyPrinter {
               }
         }
 
-        return token.isKind(Tokens.TokenKind.LPAREN) &&
-                token.isKind(Tokens.TokenKind.LBRACKET) &&
-                token.isKind(Tokens.TokenKind.IDENTIFIER) &&
-                token.isKind(Tokens.TokenKind.DOT);
+        return !token.isKind(Tokens.TokenKind.LPAREN) &&
+               !token.isKind(Tokens.TokenKind.LBRACKET) &&
+               !token.isKind(Tokens.TokenKind.IDENTIFIER) &&
+               !token.isKind(Tokens.TokenKind.DOT);
     }
 
     private static int indentChange(VJavaToken token) {
