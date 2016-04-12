@@ -86,7 +86,7 @@ public class VariationParser {
         //if we have arrived at the end of a variation segment, or the beginning of a new one
         //then the java segment is terminated
         if (token.isVariational()) {
-            return token.name().equals("end") || token.name().equals("dimension");
+            return true;
         }
         //otherwise, the end of a java segment must be the EOF token
         else {
@@ -109,29 +109,28 @@ public class VariationParser {
     }
 
     Dimension parseDimension() {
-        VJavaToken dimToken = new VJavaToken(scanner.token());
-        assert dimToken.name().equals("dimension");
+        Tokens.Token dimdec = scanner.token();
         scanner.nextToken();
+        Tokens.Token dimid = scanner.token();
 
-        VJavaToken dimIdToken = new VJavaToken(scanner.token());
-        String id = dimIdToken.name();
+        assert dimdec.name().toString().equals("dimension");
         scanner.nextToken();
 
         List<Alternative> alternatives = new ArrayList<>();
-        VJavaToken token;
+        Tokens.Token token;
         do {
             alternatives.add(parseChoice());
-            token = new VJavaToken(scanner.token());
-        } while (!token.isKind(Tokens.TokenKind.EOF) && token.name().equals("alternative"));
-        assert token.name().equals("end");
+            token = scanner.token();
+        } while (token.kind != Tokens.TokenKind.EOF && token.name().toString().equals("alternative"));
+        assert token.name().toString().equals("end");
         scanner.nextToken();
 
-        return new Dimension(id, alternatives);
+        return new Dimension(dimid.name().toString(), alternatives);
     }
 
     Alternative parseChoice() {
-        VJavaToken dimToken = new VJavaToken(scanner.token());
-        assert dimToken.name().equals("alternative");
+        Tokens.Token dimToken = scanner.token();
+        assert dimToken.name().toString().equals("alternative");
         scanner.nextToken();
 
         VJavaToken altIdToken = new VJavaToken(scanner.token());

@@ -41,7 +41,12 @@ public class VariationReducer {
         //otherwise, return the tokens corresponding to the full dimension-alternative syntax
         else {
             List<VJavaToken> tokens = new ArrayList<>();
-            tokens.add(new VJavaToken("dimension"));
+            tokens.add(new VJavaToken("dimension", dimension.id));
+            for(Alternative alt : dimension.alternatives) {
+                tokens.add(new VJavaToken("alternative", alt.id));
+                tokens.addAll(reduceProgram(alt.body, selections));
+                tokens.add(new VJavaToken("end"));
+            }
             tokens.add(new VJavaToken("end"));
             return tokens;
 

@@ -76,18 +76,41 @@ public class VJavaToken {
         }
     }
 
+    public VJavaToken(String declaration, String identifier) {
+        this.type = TokenType.VARIATIONAL;
+        VToken.VTokenType tokentype;
+        if(declaration.equals("alternative")) {
+            tokentype = VToken.VTokenType.ALTERNATIVE;
+        } else if(declaration.equals("dimension")) {
+            tokentype = VToken.VTokenType.DIMENSION;
+        } else {
+            //explode
+            throw new IllegalArgumentException();
+        }
+        this.vtoken = new VToken(identifier, tokentype);
+
+    }
+
+    public VJavaToken(Tokens.Token dimdec, Tokens.Token dimid) {
+        this(dimdec.name().toString(), dimid.name().toString());
+    }
+
     public String toString() {
         if(this.isVariational()) {
             return vtoken.toString();
         }
         else {
+            //if this token is a string literal, access the special string literal storage location
+            if(this.isKind(Tokens.TokenKind.STRINGLITERAL)) {
+                return "\"" + this.baseToken.stringVal() + "\"";
+            }
             String ret = "";
             if (this.baseToken.comments != null) {
                 for (Tokens.Comment comment : this.baseToken.comments) {
                     ret += comment.getText();
                 }
             }
-            if(this.name() == "") {
+            if(this.name().equals("")) {
 
                 ret += this.baseToken.kind.toString().replace("'", "");
             } else {

@@ -3,15 +3,22 @@ package lambdaland;
 import com.sun.tools.javac.parser.Tokens;
 import lambdaland.Variation.VJavaToken;
 
+import java.io.PrintStream;
 import java.util.List;
 
 /**
  * Created by rikkigibson on 4/5/16.
  */
 public class PrettyPrinter {
+    private final PrintStream outStream;
+
+    public PrettyPrinter(PrintStream outStream) {
+        this.outStream = outStream;
+    }
+
     final static String indentChar = "\t";
 
-    static void print(List<VJavaToken> program) {
+    void print(List<VJavaToken> program) {
         int indentLevel = 0;
         for (int i = 0; i < program.size() - 1; i++) {
             indentLevel += printToken(program.get(i), program.get(i+1), indentLevel);
@@ -19,12 +26,12 @@ public class PrettyPrinter {
         printToken(program.get(program.size()-1), null, indentLevel);
     }
 
-    private static int printToken(VJavaToken cur, VJavaToken next, int indentLevel) {
-        System.out.print(cur.toString());
+    private int printToken(VJavaToken cur, VJavaToken next, int indentLevel) {
+        outStream.print(cur.toString());
 
         int deltaIndent = indentChange(cur);
 
-        System.out.print(getWhitespace(cur, next, indentLevel + deltaIndent));
+        outStream.print(getWhitespace(cur, next, indentLevel + deltaIndent));
 
         return deltaIndent;
     }
@@ -68,6 +75,10 @@ public class PrettyPrinter {
     private static int indentChange(VJavaToken token) {
         if(token.isKind(Tokens.TokenKind.LBRACE)) return 1;
         if(token.isKind(Tokens.TokenKind.RBRACE)) return -1;
+        if(token.isVariational()) {
+            if(token.name().equals("end")) return -1;
+            else return 1;
+        }
         return 0;
     }
 
@@ -77,7 +88,8 @@ public class PrettyPrinter {
             result = " ";
         }
         if (isEndOfLine(cur)) {
-            if (next != null && next.isKind(Tokens.TokenKind.RBRACE)) {
+            if (next != null && (next.isKind(Tokens.TokenKind.RBRACE)
+                || next.name().equals("end"))) {
                 indentLevel -= 1;
             }
 

@@ -1,6 +1,7 @@
 package lambdaland;
 
 import com.sun.tools.javac.parser.*;
+import com.sun.tools.javac.tree.Pretty;
 import com.sun.tools.javac.util.Context;
 import lambdaland.Variation.ProgramElement;
 import lambdaland.Variation.VJavaToken;
@@ -35,9 +36,10 @@ public class Main {
 
         Map<String, String> choices = new HashMap<>();
 //        choices.put("X", "r");
-//        choices.put("Y", "u");
+        choices.put("Y", "u");
 
         List<VJavaToken> reducedTokens = VariationReducer.reduceProgram(program, choices);
-        PrettyPrinter.print(reducedTokens);
+        PrettyPrinter myPrinter = new PrettyPrinter(System.out);
+        myPrinter.print(reducedTokens);
     }
 }

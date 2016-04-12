@@ -11,6 +11,7 @@ public class VToken {
     }
 
     private VTokenType type;
+    private String name;
 
     public VToken(Tokens.Token token) {
         if(token.name() != null && token.name().toString().equals("dimension")) {
@@ -20,6 +21,11 @@ public class VToken {
         } else if(token.name() != null && token.name().toString().equals("end")) {
             this.type = VTokenType.END;
         }
+    }
+
+    public VToken(String identifier, VTokenType type) {
+        this.name = identifier;
+        this.type = type;
     }
 
     public VToken(String vjavaType) {
@@ -35,8 +41,8 @@ public class VToken {
     }
 
     public String name() {
-        if(this.type == VTokenType.ALTERNATIVE) return "alternative";
-        if(this.type == VTokenType.DIMENSION) return "dimension";
+        if(this.type == VTokenType.ALTERNATIVE) return "alternative " + this.name;
+        if(this.type == VTokenType.DIMENSION) return "dimension " + this.name;
         if(this.type == VTokenType.END) return "end";
         return null;
     }
