@@ -16,7 +16,7 @@ public class PrettyPrinter {
         this.outStream = outStream;
     }
 
-    final static String indentChar = "\t";
+    final static String indentChar = "    ";
 
     void print(List<VJavaToken> program) {
         int indentLevel = 0;

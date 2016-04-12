@@ -28,18 +28,10 @@ public class Main {
         }
         String source = builder.toString();
 
-        Context context = new Context();
-        ScannerFactory scannerFactory = ScannerFactory.instance(context);
-        Scanner scanner = scannerFactory.newScanner(source, false);
-
-        List<ProgramElement> program = new VariationParser(scanner).parseProgram();
-
         Map<String, String> choices = new HashMap<>();
 //        choices.put("X", "r");
         choices.put("Y", "u");
 
-        List<VJavaToken> reducedTokens = VariationReducer.reduceProgram(program, choices);
-        PrettyPrinter myPrinter = new PrettyPrinter(System.out);
-        myPrinter.print(reducedTokens);
+        VariationCompiler.compile(System.out, source, choices);
     }
 }
